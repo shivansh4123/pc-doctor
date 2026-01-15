@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Doctor - AI System Diagnostic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Scan Button */
+        .scan-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .scan-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            background: white;
+        }
+
+        .scan-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .scan-btn.scanning {
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+            color: white;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Health Score Card */
+        .health-card {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .health-score-circle {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .score-number {
+            font-size: 4rem;
+            font-weight: 700;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .health-status {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #f87171, #ef4444);
+        }
+
+        /* Insights */
+        .insight-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4ade80;
+        }
+
+        .insight-item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Critical Issues */
+        .issue-item {
+            background: rgba(239, 68, 68, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .severity-high {
+            background: #ef4444;
+            color: white;
+        }
+
+        .severity-medium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .severity-low {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Recommendations */
+        .recommendation-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .recommendation-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .impact-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .impact-high {
+            background: #10b981;
+        }
+
+        .impact-medium {
+            background: #3b82f6;
+        }
+
+        .impact-low {
+            background: #6366f1;
+        }
+
+        .steps-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .steps-list li {
+            margin-bottom: 8px;
+            opacity: 0.95;
+        }
+
+        /* Process List */
+        .process-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .process-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .process-name {
+            font-weight: 600;
+        }
+
+        .process-usage {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* System Info Grid */
+        .system-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .system-info-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .system-info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .system-info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .scan-time {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🩺 PC Doctor</h1>
+            <p>AI-Powered System Diagnostic & Optimization</p>
+        </div>
+
+        <!-- Scan Button -->
+        <div class="scan-section">
+            <button class="scan-btn" id="scanBtn" onclick="runScan()">
+                🔍 Scan My PC
+            </button>
+            <div class="spinner" id="spinner"></div>
+            <div class="scan-time" id="scanTime"></div>
+        </div>
+
+        <!-- Results Container -->
+        <div id="results" class="hidden">
+            <!-- Health Score Card -->
+            <div class="card health-card">
+                <h2>Overall Health Score</h2>
+                <div class="health-score-circle">
+                    <svg width="200" height="200">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12"/>
+                        <circle id="healthCircle" cx="100" cy="100" r="80" fill="none" stroke="#4ade80" stroke-width="12" 
+                                stroke-dasharray="502" stroke-dashoffset="502" 
+                                transform="rotate(-90 100 100)" stroke-linecap="round"/>
+                    </svg>
+                    <div class="score-number" id="scoreNumber">--</div>
+                </div>
+                <div class="health-status" id="healthStatus">Analyzing...</div>
+            </div>
+
+            <!-- Quick Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">CPU Usage</div>
+                    <div class="stat-value" id="cpuValue">--</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="cpuProgress"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Memory Usage</div>
+                    <div class="stat-value" id="memoryValue">--</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="memoryProgress"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Disk Usage</div>
+                    <div class="stat-value" id="diskValue">--</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="diskProgress"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Running Processes</div>
+                    <div class="stat-value" id="processValue">--</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="processProgress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Insights -->
+            <div class="card" id="insightsCard">
+                <h2>💡 Quick Insights</h2>
+                <div id="insightsContent"></div>
+            </div>
+
+            <!-- Critical Issues -->
+            <div class="card hidden" id="criticalCard">
+                <h2>⚠️ Critical Issues</h2>
+                <div id="criticalContent"></div>
+            </div>
+
+            <!-- Performance Bottlenecks -->
+            <div class="card hidden" id="bottlenecksCard">
+                <h2>🔧 Performance Bottlenecks</h2>
+                <div id="bottlenecksContent"></div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="card" id="recommendationsCard">
+                <h2>✨ AI Recommendations</h2>
+                <div id="recommendationsContent"></div>
+            </div>
+
+            <!-- Top Memory Consumers -->
+            <div class="card">
+                <h2>📊 Top Memory Consumers</h2>
+                <div class="process-list" id="memoryProcesses"></div>
+            </div>
+
+            <!-- System Information -->
+            <div class="card">
+                <h2>💻 System Information</h2>
+                <div class="system-info-grid" id="systemInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scanData = null;
+
+        async function runScan() {
+            const scanBtn = document.getElementById('scanBtn');
+            const spinner = document.getElementById('spinner');
+            const results = document.getElementById('results');
+            
+            // Update button state
+            scanBtn.disabled = true;
+            scanBtn.classList.add('scanning');
+            scanBtn.textContent = '🔄 Analyzing Your PC...';
+            spinner.style.display = 'block';
+            results.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    scanData = data;
+                    displayResults(data);
+                    document.getElementById('scanTime').textContent = `Last scanned: ${data.scan_time}`;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Failed to scan system: ' + error.message);
+            } finally {
+                scanBtn.disabled = false;
+                scanBtn.classList.remove('scanning');
+                scanBtn.textContent = '🔍 Scan Again';
+                spinner.style.display = 'none';
+            }
+        }
+
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            results.classList.remove('hidden');
+
+            const ai = data.ai_analysis;
+            const diag = data.diagnostic_data;
+
+            // Health Score
+            displayHealthScore(ai.health_score, ai.health_status);
+
+            // Quick Stats
+            displayQuickStats(diag);
+
+            // Quick Insights
+            displayInsights(ai.quick_insights);
+
+            // Critical Issues
+            if (ai.critical_issues && ai.critical_issues.length > 0) {
+                displayCriticalIssues(ai.critical_issues);
+            }
+
+            // Performance Bottlenecks
+            if (ai.performance_bottlenecks && ai.performance_bottlenecks.length > 0) {
+                displayBottlenecks(ai.performance_bottlenecks);
+            }
+
+            // Recommendations
+            displayRecommendations(ai.recommendations);
+
+            // Top Memory Processes
+            displayProcesses(diag.processes.top_memory_consumers);
+
+            // System Info
+            displaySystemInfo(diag.system, diag.cpu, diag.memory, diag.boot);
+        }
+
+        function displayHealthScore(score, status) {
+            document.getElementById('scoreNumber').textContent = score;
+            document.getElementById('healthStatus').textContent = status;
+
+            // Animate circle
+            const circle = document.getElementById('healthCircle');
+            const circumference = 502;
+            const offset = circumference - (score / 100) * circumference;
+            
+            // Determine color based on score
+            let color = '#4ade80'; // Green
+            if (score < 50) color = '#ef4444'; // Red
+            else if (score < 70) color = '#f59e0b'; // Orange
+            else if (score < 90) color = '#3b82f6'; // Blue
+
+            circle.style.stroke = color;
+            
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+                circle.style.transition = 'stroke-dashoffset 1s ease-out';
+            }, 100);
+        }
+
+        function displayQuickStats(diag) {
+            // CPU
+            const cpuPercent = diag.cpu.current_usage_percent;
+            document.getElementById('cpuValue').textContent = cpuPercent.toFixed(1) + '%';
+            updateProgressBar('cpuProgress', cpuPercent);
+
+            // Memory
+            const memPercent = diag.memory.usage_percent;
+            document.getElementById('memoryValue').textContent = memPercent.toFixed(1) + '%';
+            updateProgressBar('memoryProgress', memPercent);
+
+            // Disk (first partition)
+            const diskPercent = diag.disk.partitions[0].usage_percent;
+            document.getElementById('diskValue').textContent = diskPercent.toFixed(1) + '%';
+            updateProgressBar('diskProgress', diskPercent);
+
+            // Processes
+            const processCount = diag.processes.total_running;
+            document.getElementById('processValue').textContent = processCount;
+            updateProgressBar('processProgress', Math.min((processCount / 300) * 100, 100));
+        }
+
+        function updateProgressBar(id, percent) {
+            const bar = document.getElementById(id);
+            bar.style.width = percent + '%';
+            
+            // Update color based on percentage
+            bar.className = 'progress-fill';
+            if (percent > 80) bar.classList.add('danger');
+            else if (percent > 60) bar.classList.add('warning');
+        }
+
+        function displayInsights(insights) {
+            const content = document.getElementById('insightsContent');
+            content.innerHTML = `
+                <div class="insight-item">
+                    <strong>CPU:</strong> ${insights.cpu_status}
+                </div>
+                <div class="insight-item">
+                    <strong>Memory:</strong> ${insights.memory_status}
+                </div>
+                <div class="insight-item">
+                    <strong>Disk:</strong> ${insights.disk_status}
+                </div>
+                <div class="insight-item">
+                    <strong>Summary:</strong> ${insights.overall_summary}
+                </div>
+            `;
+        }
+
+        function displayCriticalIssues(issues) {
+            const card = document.getElementById('criticalCard');
+            const content = document.getElementById('criticalContent');
+            card.classList.remove('hidden');
+
+            content.innerHTML = issues.map(issue => `
+                <div class="issue-item">
+                    <strong>${issue.title}
+                        <span class="severity-badge severity-${issue.severity}">${issue.severity.toUpperCase()}</span>
+                    </strong>
+                    <p>${issue.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function displayBottlenecks(bottlenecks) {
+            const card = document.getElementById('bottlenecksCard');
+            const content = document.getElementById('bottlenecksContent');
+            card.classList.remove('hidden');
+
+            content.innerHTML = bottlenecks.map(bottleneck => `
+                <div class="insight-item">
+                    <strong>${bottleneck.component}: ${bottleneck.current_value}</strong>
+                    <p>${bottleneck.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function displayRecommendations(recommendations) {
+            const content = document.getElementById('recommendationsContent');
+            
+            content.innerHTML = recommendations.map((rec, index) => `
+                <div class="recommendation-item">
+                    <h3>
+                        ${index + 1}. ${rec.title}
+                        <span class="impact-badge impact-${rec.impact.toLowerCase()}">${rec.impact} Impact</span>
+                    </h3>
+                    <p>${rec.description}</p>
+                    <ol class="steps-list">
+                        ${rec.steps.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+            `).join('');
+        }
+
+        function displayProcesses(processes) {
+            const content = document.getElementById('memoryProcesses');
+            
+            content.innerHTML = processes.map(proc => `
+                <div class="process-item">
+                    <span class="process-name">${proc.name}</span>
+                    <span class="process-usage">${proc.memory_percent.toFixed(2)}% RAM</span>
+                </div>
+            `).join('');
+        }
+
+        function displaySystemInfo(system, cpu, memory, boot) {
+            const content = document.getElementById('systemInfo');
+            
+            content.innerHTML = `
+                <div class="system-info-item">
+                    <div class="system-info-label">Operating System</div>
+                    <div class="system-info-value">${system.os}</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Processor</div>
+                    <div class="system-info-value">${cpu.physical_cores} Cores</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Total RAM</div>
+                    <div class="system-info-value">${memory.total_gb} GB</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">System Uptime</div>
+                    <div class="system-info-value">${boot.uptime_hours.toFixed(1)} hours</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Hostname</div>
+                    <div class="system-info-value">${system.hostname}</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Architecture</div>
+                    <div class="system-info-value">${system.architecture}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

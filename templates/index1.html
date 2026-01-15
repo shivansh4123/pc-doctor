@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Doctor - AI System Diagnostic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fc 0%, #f0f2f8 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: #1a1a2e;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Enhanced header with better spacing and branding */
+        .header {
+            margin-bottom: 50px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a5568 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.15rem;
+            color: #4a5568;
+            font-weight: 500;
+            opacity: 0.85;
+        }
+
+        .header-status {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #065f46;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Premium scan button with enhanced styling */
+        .scan-section {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .scan-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scan-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .scan-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 45px rgba(99, 102, 241, 0.4);
+        }
+
+        .scan-btn:hover::before {
+            left: 100%;
+        }
+
+        .scan-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .scan-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .scan-btn.scanning {
+            background: linear-gradient(90deg, #4f46e5, #6366f1, #4f46e5);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            margin: 25px auto;
+            border: 4px solid rgba(99, 102, 241, 0.1);
+            border-top: 4px solid #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .scan-time {
+            text-align: center;
+            color: #4a5568;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.75;
+        }
+
+        /* Main grid layout for dashboard sections */
+        #results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+        .card:nth-child(4) { animation-delay: 0.3s; }
+        .card:nth-child(n+5) { animation-delay: 0.4s; }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #1a1a2e;
+            letter-spacing: -0.3px;
+        }
+
+        /* Full-width card for main health metric */
+        .card-full {
+            grid-column: 1 / -1;
+        }
+
+        .card-full .health-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        @media (max-width: 1200px) {
+            .card-full .health-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Health score with circular progress redesign */
+        .health-score-circle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .circle-container {
+            width: 180px;
+            height: 180px;
+            position: relative;
+        }
+
+        .score-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1a1a2e;
+            letter-spacing: -1px;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4a5568;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .health-status {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-align: center;
+        }
+
+        /* Individual metric cards in health section */
+        .health-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .metric-item {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0.02) 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .metric-item:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateX(4px);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 6px;
+            opacity: 0.8;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Quick stats grid improvements */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.03) 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.15s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.25s; }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.3);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0.06) 100%);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.1);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #4a5568;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.75;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a1a2e;
+            letter-spacing: -0.5px;
+        }
+
+        /* Issue and insight items */
+        .insight-item, .issue-item, .recommendation-item {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%);
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            border-left: 4px solid #10b981;
+            color: #1a1a2e;
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease-out both;
+        }
+
+        .issue-item {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 100%);
+            border-left-color: #ef4444;
+        }
+
+        .recommendation-item {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.04) 100%);
+            border-left-color: #6366f1;
+        }
+
+        .insight-item:hover, .issue-item:hover, .recommendation-item:hover {
+            transform: translateX(6px);
+            border-left-width: 6px;
+        }
+
+        .insight-item strong, .issue-item strong, .recommendation-item strong {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        .severity-badge, .impact-badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+        }
+
+        .severity-high {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .severity-medium {
+            background: #fcd34d;
+            color: #92400e;
+        }
+
+        .severity-low {
+            background: #bfdbfe;
+            color: #1e3a8a;
+        }
+
+        .impact-high {
+            background: #10b981;
+            color: white;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .impact-medium {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .impact-low {
+            background: #6366f1;
+            color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .steps-list {
+            margin-top: 12px;
+            padding-left: 20px;
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .steps-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Process list */
+        .process-list {
+            max-height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .process-item {
+            background: rgba(0, 0, 0, 0.04);
+            padding: 14px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            animation: slideIn 0.5s ease-out both;
+        }
+
+        .process-item:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.04) 100%);
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateX(4px);
+        }
+
+        .process-name {
+            font-weight: 600;
+            color: #1a1a2e;
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .process-usage {
+            font-size: 0.85rem;
+            opacity: 0.75;
+            color: #4a5568;
+            font-weight: 500;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        /* System info grid */
+        .system-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .system-info-item {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.06) 0%, rgba(99, 102, 241, 0.02) 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .system-info-item:nth-child(n) { animation-delay: calc(0.05s * var(--index)); }
+
+        .system-info-item:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .system-info-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .system-info-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .card-full .health-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            #results {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .card-full .health-content {
+                grid-template-columns: 1fr;
+            }
+
+            .scan-btn {
+                padding: 14px 40px;
+                font-size: 1rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .system-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #results {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.4);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Enhanced header with status indicator -->
+        <div class="header">
+            <div class="header-top">
+                <div class="header-title">
+                    <h1>PC Doctor</h1>
+                    <p>Professional System Diagnostic & Optimization Platform</p>
+                </div>
+                <div class="header-status">
+                    <div class="status-badge">
+                        <div class="status-dot"></div>
+                        System Ready
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan Section -->
+        <div class="scan-section">
+            <button class="scan-btn" id="scanBtn" onclick="runScan()">
+                Begin Full System Scan
+            </button>
+            <div class="spinner" id="spinner"></div>
+            <div class="scan-time" id="scanTime"></div>
+        </div>
+
+        <!-- Main results grid with improved layout -->
+        <div id="results" class="hidden">
+            <!-- Health Score Card - Full Width -->
+            <div class="card card-full" id="healthCard">
+                <h2>System Health Overview</h2>
+                <div class="health-content">
+                    <!-- Main Score -->
+                    <div class="health-score-circle">
+                        <div class="circle-container">
+                            <svg width="180" height="180" style="position: absolute; top: 0; left: 0;">
+                                <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="10"/>
+                                <circle id="healthCircle" cx="90" cy="90" r="70" fill="none" stroke="#4ade80" stroke-width="10" 
+                                        stroke-dasharray="440" stroke-dashoffset="440" 
+                                        transform="rotate(-90 90 90)" stroke-linecap="round"/>
+                            </svg>
+                            <div class="score-number" id="scoreNumber">--</div>
+                        </div>
+                        <div class="score-label">Overall Health</div>
+                        <div class="health-status" id="healthStatus">Analyzing...</div>
+                    </div>
+
+                    <!-- Metrics Column 1 -->
+                    <div class="health-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">CPU Status</div>
+                            <div class="metric-value" id="cpuValue">--</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="cpuProgress"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Memory Status</div>
+                            <div class="metric-value" id="memoryValue">--</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="memoryProgress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Column 2 -->
+                    <div class="health-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">Disk Status</div>
+                            <div class="metric-value" id="diskValue">--</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="diskProgress"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Active Processes</div>
+                            <div class="metric-value" id="processValue">--</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="processProgress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Insights -->
+            <div class="card" id="insightsCard">
+                <h2>System Insights</h2>
+                <div id="insightsContent"></div>
+            </div>
+
+            <!-- Critical Issues -->
+            <div class="card hidden" id="criticalCard">
+                <h2>Critical Issues</h2>
+                <div id="criticalContent"></div>
+            </div>
+
+            <!-- Performance Bottlenecks -->
+            <div class="card hidden" id="bottlenecksCard">
+                <h2>Performance Issues</h2>
+                <div id="bottlenecksContent"></div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="card card-full" id="recommendationsCard">
+                <h2>AI-Powered Recommendations</h2>
+                <div id="recommendationsContent"></div>
+            </div>
+
+            <!-- Top Memory Consumers -->
+            <div class="card">
+                <h2>Memory Consumers</h2>
+                <div class="process-list" id="memoryProcesses"></div>
+            </div>
+
+            <!-- System Information -->
+            <div class="card card-full">
+                <h2>System Information</h2>
+                <div class="system-info-grid" id="systemInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scanData = null;
+
+        async function runScan() {
+            const scanBtn = document.getElementById('scanBtn');
+            const spinner = document.getElementById('spinner');
+            const results = document.getElementById('results');
+            
+            scanBtn.disabled = true;
+            scanBtn.classList.add('scanning');
+            scanBtn.textContent = 'Analyzing Your PC...';
+            spinner.style.display = 'block';
+            results.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    scanData = data;
+                    displayResults(data);
+                    document.getElementById('scanTime').textContent = `Last scanned: ${data.scan_time}`;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Failed to scan system: ' + error.message);
+            } finally {
+                scanBtn.disabled = false;
+                scanBtn.classList.remove('scanning');
+                scanBtn.textContent = 'Scan Again';
+                spinner.style.display = 'none';
+            }
+        }
+
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            results.classList.remove('hidden');
+
+            const ai = data.ai_analysis;
+            const diag = data.diagnostic_data;
+
+            displayHealthScore(ai.health_score, ai.health_status);
+            displayQuickStats(diag);
+            displayInsights(ai.quick_insights);
+
+            if (ai.critical_issues && ai.critical_issues.length > 0) {
+                displayCriticalIssues(ai.critical_issues);
+            }
+
+            if (ai.performance_bottlenecks && ai.performance_bottlenecks.length > 0) {
+                displayBottlenecks(ai.performance_bottlenecks);
+            }
+
+            displayRecommendations(ai.recommendations);
+            displayProcesses(diag.processes.top_memory_consumers);
+            displaySystemInfo(diag.system, diag.cpu, diag.memory, diag.boot);
+        }
+
+        function displayHealthScore(score, status) {
+            document.getElementById('scoreNumber').textContent = score;
+            document.getElementById('healthStatus').textContent = status;
+
+            const circle = document.getElementById('healthCircle');
+            const circumference = 440;
+            const offset = circumference - (score / 100) * circumference;
+            
+            let color = '#4ade80';
+            if (score < 50) color = '#ef4444';
+            else if (score < 70) color = '#f59e0b';
+            else if (score < 90) color = '#3b82f6';
+
+            circle.style.stroke = color;
+            
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+                circle.style.transition = 'stroke-dashoffset 1s ease-out';
+            }, 100);
+        }
+
+        function displayQuickStats(diag) {
+            const cpuPercent = diag.cpu.current_usage_percent;
+            document.getElementById('cpuValue').textContent = cpuPercent.toFixed(1) + '%';
+            updateProgressBar('cpuProgress', cpuPercent);
+
+            const memPercent = diag.memory.usage_percent;
+            document.getElementById('memoryValue').textContent = memPercent.toFixed(1) + '%';
+            updateProgressBar('memoryProgress', memPercent);
+
+            const diskPercent = diag.disk.partitions[0].usage_percent;
+            document.getElementById('diskValue').textContent = diskPercent.toFixed(1) + '%';
+            updateProgressBar('diskProgress', diskPercent);
+
+            const processCount = diag.processes.total_running;
+            document.getElementById('processValue').textContent = processCount;
+            updateProgressBar('processProgress', Math.min((processCount / 300) * 100, 100));
+        }
+
+        function updateProgressBar(id, percent) {
+            const bar = document.getElementById(id);
+            bar.style.width = percent + '%';
+            
+            bar.className = 'progress-fill';
+            if (percent > 80) bar.classList.add('danger');
+            else if (percent > 60) bar.classList.add('warning');
+        }
+
+        function displayInsights(insights) {
+            const content = document.getElementById('insightsContent');
+            content.innerHTML = `
+                <div class="insight-item">
+                    <strong>CPU Status</strong>
+                    <p>${insights.cpu_status}</p>
+                </div>
+                <div class="insight-item">
+                    <strong>Memory Status</strong>
+                    <p>${insights.memory_status}</p>
+                </div>
+                <div class="insight-item">
+                    <strong>Disk Status</strong>
+                    <p>${insights.disk_status}</p>
+                </div>
+                <div class="insight-item">
+                    <strong>Summary</strong>
+                    <p>${insights.overall_summary}</p>
+                </div>
+            `;
+        }
+
+        function displayCriticalIssues(issues) {
+            const card = document.getElementById('criticalCard');
+            const content = document.getElementById('criticalContent');
+            card.classList.remove('hidden');
+
+            content.innerHTML = issues.map(issue => `
+                <div class="issue-item">
+                    <strong>
+                        <span>${issue.title}</span>
+                        <span class="severity-badge severity-${issue.severity}">${issue.severity}</span>
+                    </strong>
+                    <p>${issue.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function displayBottlenecks(bottlenecks) {
+            const card = document.getElementById('bottlenecksCard');
+            const content = document.getElementById('bottlenecksContent');
+            card.classList.remove('hidden');
+
+            content.innerHTML = bottlenecks.map(bottleneck => `
+                <div class="issue-item">
+                    <strong>${bottleneck.component}: ${bottleneck.current_value}</strong>
+                    <p>${bottleneck.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function displayRecommendations(recommendations) {
+            const content = document.getElementById('recommendationsContent');
+            
+            content.innerHTML = recommendations.map((rec, index) => `
+                <div class="recommendation-item">
+                    <strong>
+                        <span>${index + 1}. ${rec.title}</span>
+                        <span class="impact-badge impact-${rec.impact.toLowerCase()}">${rec.impact} Impact</span>
+                    </strong>
+                    <p>${rec.description}</p>
+                    <ol class="steps-list">
+                        ${rec.steps.map(step => `<li>${step}</li>`).join('')}
+                    </ol>
+                </div>
+            `).join('');
+        }
+
+        function displayProcesses(processes) {
+            const content = document.getElementById('memoryProcesses');
+            
+            content.innerHTML = processes.map(proc => `
+                <div class="process-item">
+                    <span class="process-name">${proc.name}</span>
+                    <span class="process-usage">${proc.memory_percent.toFixed(2)}% RAM</span>
+                </div>
+            `).join('');
+        }
+
+        function displaySystemInfo(system, cpu, memory, boot) {
+            const content = document.getElementById('systemInfo');
+            
+            content.innerHTML = `
+                <div class="system-info-item">
+                    <div class="system-info-label">Operating System</div>
+                    <div class="system-info-value">${system.os}</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Processor</div>
+                    <div class="system-info-value">${cpu.physical_cores} Cores</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Total RAM</div>
+                    <div class="system-info-value">${memory.total_gb} GB</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">System Uptime</div>
+                    <div class="system-info-value">${boot.uptime_hours.toFixed(1)} hours</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Hostname</div>
+                    <div class="system-info-value">${system.hostname}</div>
+                </div>
+                <div class="system-info-item">
+                    <div class="system-info-label">Architecture</div>
+                    <div class="system-info-value">${system.architecture}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
