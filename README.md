@@ -1,6 +1,6 @@
 # pc-doctor
 
-Clean potentially unwanted files and invalid Windows Registry entries from a computer.
+Clean potentially unwanted files and invalid Windows Registry entries from a computer using AI for you specific needs.
 
 pc-doctor helps identify and safely remove temporary/unwanted files and common invalid or stale Windows Registry entries. It is designed to assist power users and system administrators in reclaiming disk space and improving system health while minimizing risk through dry-run modes, backups, and clear logging.
 
