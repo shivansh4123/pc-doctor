@@ -23,7 +23,6 @@
             margin: 0 auto;
         }
 
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -43,44 +42,18 @@
             font-size: 1.2rem;
             opacity: 0.65;
             color: #4a5568;
-            font-weight: 400;
         }
 
-        /* Animations */
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* Scan Button */
         .scan-section {
             text-align: center;
             margin-bottom: 40px;
@@ -97,34 +70,25 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            letter-spacing: 0.3px;
         }
 
         .scan-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.15);
-            background: linear-gradient(135deg, white 0%, rgba(255, 255, 255, 0.9) 100%);
-            border-color: rgba(99, 102, 241, 0.3);
-        }
-
-        .scan-btn:active {
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
         }
 
         .scan-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
 
         .scan-btn.scanning {
-            background: linear-gradient(90deg, #e0e7ff, #f3e8ff, #e0e7ff);
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #6366f1);
             background-size: 200% 100%;
             animation: shimmer 2s infinite;
-            color: #6366f1;
-            border-color: rgba(99, 102, 241, 0.4);
+            color: white;
         }
 
         @keyframes shimmer {
@@ -132,7 +96,6 @@
             100% { background-position: -200% 0; }
         }
 
-        /* Loading Spinner */
         .spinner {
             border: 4px solid rgba(99, 102, 241, 0.1);
             border-top: 4px solid #6366f1;
@@ -149,48 +112,39 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Cards */
+        .scan-time {
+            text-align: center;
+            color: #4a5568;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.75;
+        }
+
         .card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
             color: #1a1a2e;
-            animation: fadeInUp 0.6s ease-out both;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .card:nth-child(1) { animation-delay: 0s; }
-        .card:nth-child(2) { animation-delay: 0.1s; }
-        .card:nth-child(3) { animation-delay: 0.2s; }
-        .card:nth-child(4) { animation-delay: 0.3s; }
-        .card:nth-child(5) { animation-delay: 0.4s; }
-        .card:nth-child(n+6) { animation-delay: 0.5s; }
-
         .card:hover {
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
         }
 
         .card h2 {
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #1a1a2e;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.3px;
+            margin-bottom: 20px;
         }
 
-        /* Health Score Card */
         .health-card {
             text-align: center;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 100%);
         }
 
         .health-score-circle {
@@ -207,487 +161,409 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #1a1a2e;
-            letter-spacing: -1px;
         }
 
         .health-status {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-top: 10px;
-            color: #4a5568;
-            letter-spacing: -0.2px;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 20px;
-            animation: fadeInUp 0.6s ease-out 0.15s both;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 25px;
             border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: fadeInUp 0.6s ease-out both;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.15s; }
-        .stat-card:nth-child(3) { animation-delay: 0.2s; }
-        .stat-card:nth-child(4) { animation-delay: 0.25s; }
-
-        .stat-card:hover {
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.1);
-            transform: translateY(-3px);
-            border-color: rgba(99, 102, 241, 0.2);
-            background: rgba(255, 255, 255, 0.6);
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             opacity: 0.7;
             margin-bottom: 10px;
-            color: #4a5568;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .stat-value {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 12px;
-            color: #1a1a2e;
-            letter-spacing: -0.5px;
+            margin-bottom: 10px;
         }
 
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: rgba(0, 0, 0, 0.08);
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #10b981, #059669);
+            background: linear-gradient(90deg, #4ade80, #22c55e);
             border-radius: 10px;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            transition: width 0.5s ease;
         }
 
         .progress-fill.warning {
-            background: linear-gradient(90deg, #f59e0b, #d97706);
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
         }
 
         .progress-fill.danger {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+            background: linear-gradient(90deg, #f87171, #ef4444);
         }
 
-        /* Insights */
-        .insight-item {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border-left: 4px solid #10b981;
-            color: #1a1a2e;
-            transition: all 0.3s ease;
-            animation: slideIn 0.5s ease-out both;
+        /* AUTOMATION SECTION STYLES */
+        .automation-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid rgba(99, 102, 241, 0.3);
         }
 
-        .insight-item:hover {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
-            border-left-width: 6px;
-        }
-
-        .insight-item strong {
-            display: block;
-            margin-bottom: 5px;
-            color: #065f46;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-        }
-
-        /* Critical Issues */
-        .issue-item {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 100%);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border-left: 4px solid #ef4444;
-            color: #1a1a2e;
-            transition: all 0.3s ease;
-            animation: slideIn 0.5s ease-out both;
-        }
-
-        .issue-item:hover {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.08) 100%);
-            border-left-width: 6px;
-        }
-
-        .issue-item strong {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 5px;
-            color: #7f1d1d;
-            font-weight: 700;
-        }
-
-        .severity-badge {
-            display: inline-block;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .severity-high {
-            background: #fecaca;
-            color: #991b1b;
-        }
-
-        .severity-medium {
-            background: #fcd34d;
-            color: #92400e;
-        }
-
-        .severity-low {
-            background: #bfdbfe;
-            color: #1e3a8a;
-        }
-
-        /* Recommendations */
-        .recommendation-item {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.04) 100%);
-            padding: 22px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            border-left: 4px solid #6366f1;
-            color: #1a1a2e;
-            transition: all 0.3s ease;
-            animation: slideIn 0.5s ease-out both;
-        }
-
-        .recommendation-item:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0.08) 100%);
-            border-left-width: 6px;
-        }
-
-        .recommendation-item h3 {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .automation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 15px;
-            color: #1a1a2e;
-            font-weight: 700;
-            letter-spacing: -0.2px;
+            margin-bottom: 20px;
         }
 
-        .recommendation-item p {
-            margin-bottom: 12px;
-            line-height: 1.6;
-            color: #4a5568;
+        .automation-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
         }
 
-        .impact-badge {
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .impact-high {
-            background: #10b981;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-        }
-
-        .impact-medium {
-            background: #3b82f6;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-        }
-
-        .impact-low {
-            background: #6366f1;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-        }
-
-        .steps-list {
-            margin-top: 12px;
-            padding-left: 20px;
-            color: #4a5568;
-        }
-
-        .steps-list li {
+        .automation-item h3 {
+            font-size: 1.1rem;
             margin-bottom: 8px;
-            opacity: 0.95;
-            line-height: 1.5;
+            color: #1a1a2e;
         }
 
-        /* Process List */
+        .automation-item p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+
+        .auto-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .auto-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .auto-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auto-btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .auto-all-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .auto-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .optimization-result {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .optimization-result.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
         .process-list {
             max-height: 400px;
             overflow-y: auto;
         }
 
         .process-item {
-            background: rgba(0, 0, 0, 0.04);
-            padding: 14px;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #1a1a2e;
-            transition: all 0.3s ease;
-            animation: slideIn 0.5s ease-out both;
-            border: 1px solid rgba(99, 102, 241, 0.1);
         }
 
-        .process-item:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.04) 100%);
-            border-color: rgba(99, 102, 241, 0.2);
-            transform: translateX(4px);
+        .process-info {
+            flex: 1;
         }
 
         .process-name {
             font-weight: 600;
-            color: #1a1a2e;
-            letter-spacing: -0.2px;
+            margin-bottom: 4px;
         }
 
         .process-usage {
             font-size: 0.9rem;
-            opacity: 0.75;
-            color: #4a5568;
-            font-weight: 500;
+            opacity: 0.7;
         }
 
-        /* System Info Grid */
+        .kill-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .kill-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .kill-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .insight-item {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4ade80;
+        }
+
+        .insight-item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .recommendation-item {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .recommendation-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .impact-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .impact-high { background: #10b981; }
+        .impact-medium { background: #3b82f6; }
+        .impact-low { background: #6366f1; }
+
+        .steps-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .steps-list li {
+            margin-bottom: 8px;
+            opacity: 0.85;
+        }
+
         .system-info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            gap: 15px;
         }
 
         .system-info-item {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0.02) 100%);
-            padding: 18px;
-            border-radius: 12px;
-            color: #1a1a2e;
-            border: 1px solid rgba(99, 102, 241, 0.1);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease-out both;
-        }
-
-        .system-info-item:nth-child(1) { animation-delay: 0.05s; }
-        .system-info-item:nth-child(2) { animation-delay: 0.1s; }
-        .system-info-item:nth-child(3) { animation-delay: 0.15s; }
-        .system-info-item:nth-child(4) { animation-delay: 0.2s; }
-        .system-info-item:nth-child(5) { animation-delay: 0.25s; }
-        .system-info-item:nth-child(6) { animation-delay: 0.3s; }
-
-        .system-info-item:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
-            border-color: rgba(99, 102, 241, 0.2);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.4);
+            padding: 15px;
+            border-radius: 10px;
         }
 
         .system-info-label {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             opacity: 0.7;
-            margin-bottom: 8px;
-            color: #4a5568;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 5px;
         }
 
         .system-info-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #1a1a2e;
-            letter-spacing: -0.3px;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
-        /* Responsive */
+        .hidden { display: none; }
+
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .card h2 {
-                font-size: 1.4rem;
-            }
-
-            .scan-btn {
-                padding: 14px 40px;
-                font-size: 1.1rem;
-            }
+            .header h1 { font-size: 2rem; }
+            .stats-grid, .automation-grid { grid-template-columns: 1fr; }
+            .card { padding: 20px; }
         }
 
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(99, 102, 241, 0.05);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(99, 102, 241, 0.2);
-            border-radius: 10px;
-            transition: background 0.3s ease;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.4);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .scan-time {
-            text-align: center;
-            color: #4a5568;
-            opacity: 0.75;
-            margin-top: 12px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <h1>PC Doctor</h1>
+            <h1>🩺 PC Doctor</h1>
             <p>AI-Powered System Diagnostic & Optimization</p>
         </div>
 
-        <!-- Scan Button -->
         <div class="scan-section">
-            <button class="scan-btn" id="scanBtn" onclick="runScan()">
-                Scan My PC
-            </button>
+            <button class="scan-btn" id="scanBtn" onclick="runScan()">🔍 Scan My PC</button>
             <div class="spinner" id="spinner"></div>
             <div class="scan-time" id="scanTime"></div>
         </div>
 
-        <!-- Results Container -->
         <div id="results" class="hidden">
-            <!-- Health Score Card -->
+            <!-- Health Score -->
             <div class="card health-card">
                 <h2>Overall Health Score</h2>
                 <div class="health-score-circle">
                     <svg width="200" height="200">
-                        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="12"/>
                         <circle id="healthCircle" cx="100" cy="100" r="80" fill="none" stroke="#4ade80" stroke-width="12" 
-                                stroke-dasharray="502" stroke-dashoffset="502" 
-                                transform="rotate(-90 100 100)" stroke-linecap="round"/>
+                                stroke-dasharray="502" stroke-dashoffset="502" transform="rotate(-90 100 100)" stroke-linecap="round"/>
                     </svg>
                     <div class="score-number" id="scoreNumber">--</div>
                 </div>
                 <div class="health-status" id="healthStatus">Analyzing...</div>
             </div>
 
-            <!-- Quick Stats Grid -->
+            <!-- Quick Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">CPU Usage</div>
                     <div class="stat-value" id="cpuValue">--</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="cpuProgress"></div>
-                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="cpuProgress"></div></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Memory Usage</div>
                     <div class="stat-value" id="memoryValue">--</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="memoryProgress"></div>
-                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="memoryProgress"></div></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Disk Usage</div>
                     <div class="stat-value" id="diskValue">--</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="diskProgress"></div>
-                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="diskProgress"></div></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Running Processes</div>
                     <div class="stat-value" id="processValue">--</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="processProgress"></div>
+                    <div class="progress-bar"><div class="progress-fill" id="processProgress"></div></div>
+                </div>
+            </div>
+
+            <!-- 🔧 AUTOMATION SECTION -->
+            <div class="card automation-card">
+                <h2>🔧 System Optimization</h2>
+                <p style="margin-bottom: 20px; opacity: 0.8;">Automatically optimize your PC with one-click fixes</p>
+                
+                <div class="automation-grid">
+                    <div class="automation-item">
+                        <h3>🗑️ Clear Temp Files</h3>
+                        <p>Remove temporary files to free up disk space</p>
+                        <button class="auto-btn" onclick="clearTempFiles()" id="tempBtn">Clear Now</button>
+                        <div class="optimization-result" id="tempResult"></div>
                     </div>
+
+                    <div class="automation-item">
+                        <h3>🌐 Clear Browser Cache</h3>
+                        <p>Clear Chrome and Edge browser cache</p>
+                        <button class="auto-btn" onclick="clearBrowserCache()" id="cacheBtn">Clear Now</button>
+                        <div class="optimization-result" id="cacheResult"></div>
+                    </div>
+
+                    <div class="automation-item">
+                        <h3>🗄️ Empty Recycle Bin</h3>
+                        <p>Permanently delete items in Recycle Bin</p>
+                        <button class="auto-btn" onclick="emptyRecycleBin()" id="recycleBtn">Empty Now</button>
+                        <div class="optimization-result" id="recycleResult"></div>
+                    </div>
+
+                    <div class="automation-item">
+                        <h3>💾 Clear RAM Cache</h3>
+                        <p>Free up memory by clearing RAM cache</p>
+                        <button class="auto-btn" onclick="clearRAMCache()" id="ramBtn">Clear Now</button>
+                        <div class="optimization-result" id="ramResult"></div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="auto-all-btn" onclick="autoOptimizeAll()" id="autoAllBtn">
+                        ⚡ Auto-Optimize Everything
+                    </button>
+                    <div class="optimization-result" id="autoAllResult" style="max-width: 600px; margin: 15px auto 0;"></div>
                 </div>
             </div>
 
             <!-- Quick Insights -->
-            <div class="card" id="insightsCard">
-                <h2>Quick Insights</h2>
+            <div class="card">
+                <h2>💡 Quick Insights</h2>
                 <div id="insightsContent"></div>
             </div>
 
-            <!-- Critical Issues -->
-            <div class="card hidden" id="criticalCard">
-                <h2>Critical Issues</h2>
-                <div id="criticalContent"></div>
-            </div>
-
-            <!-- Performance Bottlenecks -->
-            <div class="card hidden" id="bottlenecksCard">
-                <h2>Performance Bottlenecks</h2>
-                <div id="bottlenecksContent"></div>
-            </div>
-
-            <!-- Recommendations -->
-            <div class="card" id="recommendationsCard">
-                <h2>AI Recommendations</h2>
+            <!-- AI Recommendations -->
+            <div class="card">
+                <h2>✨ AI Recommendations</h2>
                 <div id="recommendationsContent"></div>
             </div>
 
             <!-- Top Memory Consumers -->
             <div class="card">
-                <h2>Top Memory Consumers</h2>
+                <h2>📊 Top Memory Consumers</h2>
+                <p style="margin-bottom: 15px; opacity: 0.7;">Click "End Task" to close memory-hungry processes</p>
                 <div class="process-list" id="memoryProcesses"></div>
             </div>
 
             <!-- System Information -->
             <div class="card">
-                <h2>System Information</h2>
+                <h2>💻 System Information</h2>
                 <div class="system-info-grid" id="systemInfo"></div>
             </div>
         </div>
@@ -701,21 +577,14 @@
             const spinner = document.getElementById('spinner');
             const results = document.getElementById('results');
             
-            // Update button state
             scanBtn.disabled = true;
             scanBtn.classList.add('scanning');
-            scanBtn.textContent = 'Analyzing Your PC...';
+            scanBtn.textContent = '🔄 Analyzing...';
             spinner.style.display = 'block';
             results.classList.add('hidden');
 
             try {
-                const response = await fetch('/api/scan', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
+                const response = await fetch('/api/scan', { method: 'POST', headers: {'Content-Type': 'application/json'} });
                 const data = await response.json();
 
                 if (data.success) {
@@ -726,48 +595,25 @@
                     alert('Error: ' + data.error);
                 }
             } catch (error) {
-                alert('Failed to scan system: ' + error.message);
+                alert('Failed to scan: ' + error.message);
             } finally {
                 scanBtn.disabled = false;
                 scanBtn.classList.remove('scanning');
-                scanBtn.textContent = 'Scan Again';
+                scanBtn.textContent = '🔍 Scan Again';
                 spinner.style.display = 'none';
             }
         }
 
         function displayResults(data) {
-            const results = document.getElementById('results');
-            results.classList.remove('hidden');
-
+            document.getElementById('results').classList.remove('hidden');
             const ai = data.ai_analysis;
             const diag = data.diagnostic_data;
 
-            // Health Score
             displayHealthScore(ai.health_score, ai.health_status);
-
-            // Quick Stats
             displayQuickStats(diag);
-
-            // Quick Insights
             displayInsights(ai.quick_insights);
-
-            // Critical Issues
-            if (ai.critical_issues && ai.critical_issues.length > 0) {
-                displayCriticalIssues(ai.critical_issues);
-            }
-
-            // Performance Bottlenecks
-            if (ai.performance_bottlenecks && ai.performance_bottlenecks.length > 0) {
-                displayBottlenecks(ai.performance_bottlenecks);
-            }
-
-            // Recommendations
             displayRecommendations(ai.recommendations);
-
-            // Top Memory Processes
             displayProcesses(diag.processes.top_memory_consumers);
-
-            // System Info
             displaySystemInfo(diag.system, diag.cpu, diag.memory, diag.boot);
         }
 
@@ -775,19 +621,16 @@
             document.getElementById('scoreNumber').textContent = score;
             document.getElementById('healthStatus').textContent = status;
 
-            // Animate circle
             const circle = document.getElementById('healthCircle');
             const circumference = 502;
             const offset = circumference - (score / 100) * circumference;
             
-            // Determine color based on score
-            let color = '#4ade80'; // Green
-            if (score < 50) color = '#ef4444'; // Red
-            else if (score < 70) color = '#f59e0b'; // Orange
-            else if (score < 90) color = '#3b82f6'; // Blue
+            let color = '#4ade80';
+            if (score < 50) color = '#ef4444';
+            else if (score < 70) color = '#f59e0b';
+            else if (score < 90) color = '#3b82f6';
 
             circle.style.stroke = color;
-            
             setTimeout(() => {
                 circle.style.strokeDashoffset = offset;
                 circle.style.transition = 'stroke-dashoffset 1s ease-out';
@@ -795,141 +638,257 @@
         }
 
         function displayQuickStats(diag) {
-            // CPU
-            const cpuPercent = diag.cpu.current_usage_percent;
-            document.getElementById('cpuValue').textContent = cpuPercent.toFixed(1) + '%';
-            updateProgressBar('cpuProgress', cpuPercent);
+            document.getElementById('cpuValue').textContent = diag.cpu.current_usage_percent.toFixed(1) + '%';
+            updateProgressBar('cpuProgress', diag.cpu.current_usage_percent);
 
-            // Memory
-            const memPercent = diag.memory.usage_percent;
-            document.getElementById('memoryValue').textContent = memPercent.toFixed(1) + '%';
-            updateProgressBar('memoryProgress', memPercent);
+            document.getElementById('memoryValue').textContent = diag.memory.usage_percent.toFixed(1) + '%';
+            updateProgressBar('memoryProgress', diag.memory.usage_percent);
 
-            // Disk (first partition)
-            const diskPercent = diag.disk.partitions[0].usage_percent;
-            document.getElementById('diskValue').textContent = diskPercent.toFixed(1) + '%';
-            updateProgressBar('diskProgress', diskPercent);
+            document.getElementById('diskValue').textContent = diag.disk.partitions[0].usage_percent.toFixed(1) + '%';
+            updateProgressBar('diskProgress', diag.disk.partitions[0].usage_percent);
 
-            // Processes
-            const processCount = diag.processes.total_running;
-            document.getElementById('processValue').textContent = processCount;
-            updateProgressBar('processProgress', Math.min((processCount / 300) * 100, 100));
+            document.getElementById('processValue').textContent = diag.processes.total_running;
+            updateProgressBar('processProgress', Math.min((diag.processes.total_running / 300) * 100, 100));
         }
 
         function updateProgressBar(id, percent) {
             const bar = document.getElementById(id);
             bar.style.width = percent + '%';
-            
-            // Update color based on percentage
             bar.className = 'progress-fill';
             if (percent > 80) bar.classList.add('danger');
             else if (percent > 60) bar.classList.add('warning');
         }
 
         function displayInsights(insights) {
-            const content = document.getElementById('insightsContent');
-            content.innerHTML = `
-                <div class="insight-item">
-                    <strong>CPU:</strong> ${insights.cpu_status}
-                </div>
-                <div class="insight-item">
-                    <strong>Memory:</strong> ${insights.memory_status}
-                </div>
-                <div class="insight-item">
-                    <strong>Disk:</strong> ${insights.disk_status}
-                </div>
-                <div class="insight-item">
-                    <strong>Summary:</strong> ${insights.overall_summary}
-                </div>
+            document.getElementById('insightsContent').innerHTML = `
+                <div class="insight-item"><strong>CPU Status</strong><p>${insights.cpu_status}</p></div>
+                <div class="insight-item"><strong>Memory Status</strong><p>${insights.memory_status}</p></div>
+                <div class="insight-item"><strong>Disk Status</strong><p>${insights.disk_status}</p></div>
+                <div class="insight-item"><strong>Summary</strong><p>${insights.overall_summary}</p></div>
             `;
         }
 
-        function displayCriticalIssues(issues) {
-            const card = document.getElementById('criticalCard');
-            const content = document.getElementById('criticalContent');
-            card.classList.remove('hidden');
-
-            content.innerHTML = issues.map(issue => `
-                <div class="issue-item">
-                    <strong>
-                        <span>${issue.title}</span>
-                        <span class="severity-badge severity-${issue.severity}">${issue.severity.toUpperCase()}</span>
-                    </strong>
-                    <p>${issue.description}</p>
-                </div>
-            `).join('');
-        }
-
-        function displayBottlenecks(bottlenecks) {
-            const card = document.getElementById('bottlenecksCard');
-            const content = document.getElementById('bottlenecksContent');
-            card.classList.remove('hidden');
-
-            content.innerHTML = bottlenecks.map(bottleneck => `
-                <div class="insight-item">
-                    <strong>${bottleneck.component}: ${bottleneck.current_value}</strong>
-                    <p>${bottleneck.description}</p>
-                </div>
-            `).join('');
-        }
-
         function displayRecommendations(recommendations) {
-            const content = document.getElementById('recommendationsContent');
-            
-            content.innerHTML = recommendations.map((rec, index) => `
+            document.getElementById('recommendationsContent').innerHTML = recommendations.map((rec, i) => `
                 <div class="recommendation-item">
                     <h3>
-                        <span>${index + 1}. ${rec.title}</span>
+                        <span>${i + 1}. ${rec.title}</span>
                         <span class="impact-badge impact-${rec.impact.toLowerCase()}">${rec.impact} Impact</span>
                     </h3>
                     <p>${rec.description}</p>
-                    <ol class="steps-list">
-                        ${rec.steps.map(step => `<li>${step}</li>`).join('')}
-                    </ol>
+                    <ol class="steps-list">${rec.steps.map(s => `<li>${s}</li>`).join('')}</ol>
                 </div>
             `).join('');
         }
 
         function displayProcesses(processes) {
-            const content = document.getElementById('memoryProcesses');
-            
-            content.innerHTML = processes.map(proc => `
+            document.getElementById('memoryProcesses').innerHTML = processes.map(proc => `
                 <div class="process-item">
-                    <span class="process-name">${proc.name}</span>
-                    <span class="process-usage">${proc.memory_percent.toFixed(2)}% RAM</span>
+                    <div class="process-info">
+                        <div class="process-name">${proc.name}</div>
+                        <div class="process-usage">PID: ${proc.pid} | ${proc.memory_percent.toFixed(2)}% RAM</div>
+                    </div>
+                    <button class="kill-btn" onclick="killProcess(${proc.pid}, '${proc.name}')" id="kill-${proc.pid}">End Task</button>
                 </div>
             `).join('');
         }
 
         function displaySystemInfo(system, cpu, memory, boot) {
-            const content = document.getElementById('systemInfo');
-            
-            content.innerHTML = `
-                <div class="system-info-item">
-                    <div class="system-info-label">Operating System</div>
-                    <div class="system-info-value">${system.os}</div>
-                </div>
-                <div class="system-info-item">
-                    <div class="system-info-label">Processor</div>
-                    <div class="system-info-value">${cpu.physical_cores} Cores</div>
-                </div>
-                <div class="system-info-item">
-                    <div class="system-info-label">Total RAM</div>
-                    <div class="system-info-value">${memory.total_gb} GB</div>
-                </div>
-                <div class="system-info-item">
-                    <div class="system-info-label">System Uptime</div>
-                    <div class="system-info-value">${boot.uptime_hours.toFixed(1)} hours</div>
-                </div>
-                <div class="system-info-item">
-                    <div class="system-info-label">Hostname</div>
-                    <div class="system-info-value">${system.hostname}</div>
-                </div>
-                <div class="system-info-item">
-                    <div class="system-info-label">Architecture</div>
-                    <div class="system-info-value">${system.architecture}</div>
-                </div>
+            document.getElementById('systemInfo').innerHTML = `
+                <div class="system-info-item"><div class="system-info-label">Operating System</div><div class="system-info-value">${system.os}</div></div>
+                <div class="system-info-item"><div class="system-info-label">Processor</div><div class="system-info-value">${cpu.physical_cores} Cores</div></div>
+                <div class="system-info-item"><div class="system-info-label">Total RAM</div><div class="system-info-value">${memory.total_gb} GB</div></div>
+                <div class="system-info-item"><div class="system-info-label">System Uptime</div><div class="system-info-value">${boot.uptime_hours.toFixed(1)} hours</div></div>
+                <div class="system-info-item"><div class="system-info-label">Hostname</div><div class="system-info-value">${system.hostname}</div></div>
+                <div class="system-info-item"><div class="system-info-label">Architecture</div><div class="system-info-value">${system.architecture}</div></div>
             `;
+        }
+
+        // AUTOMATION FUNCTIONS
+        async function clearTempFiles() {
+            const btn = document.getElementById('tempBtn');
+            const result = document.getElementById('tempResult');
+            btn.disabled = true;
+            btn.textContent = 'Clearing...';
+            result.classList.remove('show');
+
+            try {
+                const response = await fetch('/api/optimize/temp-files', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    result.innerHTML = `✅ Cleared ${data.cleared_mb.toFixed(2)}MB (${data.files_deleted} files)`;
+                    result.classList.add('show');
+                    btn.classList.add('auto-btn-success');
+                    btn.textContent = '✓ Done!';
+                    setTimeout(() => { btn.classList.remove('auto-btn-success'); btn.textContent = 'Clear Again'; btn.disabled = false; }, 3000);
+                } else {
+                    result.innerHTML = `❌ Error: ${data.error}`;
+                    result.classList.add('show');
+                    btn.disabled = false;
+                    btn.textContent = 'Retry';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Error: ${error.message}`;
+                result.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = 'Retry';
+            }
+        }
+
+        async function clearBrowserCache() {
+            const btn = document.getElementById('cacheBtn');
+            const result = document.getElementById('cacheResult');
+            btn.disabled = true;
+            btn.textContent = 'Clearing...';
+            result.classList.remove('show');
+
+            try {
+                const response = await fetch('/api/optimize/browser-cache', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    result.innerHTML = `✅ Cleared ${data.cleared_mb.toFixed(2)}MB browser cache`;
+                    result.classList.add('show');
+                    btn.classList.add('auto-btn-success');
+                    btn.textContent = '✓ Done!';
+                    setTimeout(() => { btn.classList.remove('auto-btn-success'); btn.textContent = 'Clear Again'; btn.disabled = false; }, 3000);
+                } else {
+                    result.innerHTML = `❌ Error: ${data.error}`;
+                    result.classList.add('show');
+                    btn.disabled = false;
+                    btn.textContent = 'Retry';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Error: ${error.message}`;
+                result.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = 'Retry';
+            }
+        }
+
+        async function emptyRecycleBin() {
+            const btn = document.getElementById('recycleBtn');
+            const result = document.getElementById('recycleResult');
+            btn.disabled = true;
+            btn.textContent = 'Emptying...';
+            result.classList.remove('show');
+
+            try {
+                const response = await fetch('/api/optimize/recycle-bin', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    result.innerHTML = `✅ ${data.message}`;
+                    result.classList.add('show');
+                    btn.classList.add('auto-btn-success');
+                    btn.textContent = '✓ Done!';
+                    setTimeout(() => { btn.classList.remove('auto-btn-success'); btn.textContent = 'Empty Again'; btn.disabled = false; }, 3000);
+                } else {
+                    result.innerHTML = `❌ Error: ${data.error}`;
+                    result.classList.add('show');
+                    btn.disabled = false;
+                    btn.textContent = 'Retry';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Error: ${error.message}`;
+                result.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = 'Retry';
+            }
+        }
+
+        async function clearRAMCache() {
+            const btn = document.getElementById('ramBtn');
+            const result = document.getElementById('ramResult');
+            btn.disabled = true;
+            btn.textContent = 'Clearing...';
+            result.classList.remove('show');
+
+            try {
+                const response = await fetch('/api/optimize/ram-cache', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    result.innerHTML = `✅ ${data.message}`;
+                    if (data.note) result.innerHTML += `<br><small>${data.note}</small>`;
+                    result.classList.add('show');
+                    btn.classList.add('auto-btn-success');
+                    btn.textContent = '✓ Done!';
+                    setTimeout(() => { btn.classList.remove('auto-btn-success'); btn.textContent = 'Clear Again'; btn.disabled = false; }, 3000);
+                } else {
+                    result.innerHTML = `❌ Error: ${data.error}`;
+                    result.classList.add('show');
+                    btn.disabled = false;
+                    btn.textContent = 'Retry';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Error: ${error.message}`;
+                result.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = 'Retry';
+            }
+        }
+
+        async function autoOptimizeAll() {
+            const btn = document.getElementById('autoAllBtn');
+            const result = document.getElementById('autoAllResult');
+            btn.disabled = true;
+            btn.textContent = '⚡ Optimizing...';
+            result.classList.remove('show');
+
+            try {
+                const response = await fetch('/api/optimize/auto-optimize', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    let html = `<strong>✅ Optimization Complete!</strong><br><strong>Total Space Freed: ${data.total_cleared_mb.toFixed(2)}MB</strong><br><br>`;
+                    html += `<strong>Actions Taken:</strong><ul style="text-align: left; margin: 10px 0;">`;
+                    data.actions.forEach(a => html += `<li>${a}</li>`);
+                    html += `</ul>`;
+                    if (data.errors.length > 0) {
+                        html += `<br><strong>Warnings:</strong><ul style="text-align: left; margin: 10px 0;">`;
+                        data.errors.forEach(e => html += `<li>${e}</li>`);
+                        html += `</ul>`;
+                    }
+                    result.innerHTML = html;
+                    result.classList.add('show');
+                    btn.textContent = '✓ Complete!';
+                    setTimeout(() => { btn.textContent = '⚡ Auto-Optimize Everything'; btn.disabled = false; }, 5000);
+                } else {
+                    result.innerHTML = `❌ Error: ${data.error}`;
+                    result.classList.add('show');
+                    btn.disabled = false;
+                    btn.textContent = '⚡ Auto-Optimize Everything';
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Error: ${error.message}`;
+                result.classList.add('show');
+                btn.disabled = false;
+                btn.textContent = '⚡ Auto-Optimize Everything';
+            }
+        }
+
+        async function killProcess(pid, name) {
+            if (!confirm(`Are you sure you want to end "${name}"?\n\nYou may lose unsaved data.`)) return;
+
+            const btn = document.getElementById(`kill-${pid}`);
+            btn.disabled = true;
+            btn.textContent = 'Closing...';
+
+            try {
+                const response = await fetch(`/api/process/kill/${pid}`, { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    btn.textContent = '✓ Closed';
+                    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    setTimeout(() => btn.closest('.process-item').style.opacity = '0.5', 500);
+                    alert(`✅ Successfully closed ${name}\nFreed ${data.memory_freed_percent}% RAM`);
+                } else {
+                    btn.textContent = 'Failed';
+                    btn.disabled = false;
+                    alert(`❌ Failed: ${data.error}`);
+                }
+            } catch (error) {
+                btn.textContent = 'Error';
+                btn.disabled = false;
+                alert(`❌ Error: ${error.message}`);
+            }
         }
     </script>
 </body>
